@@ -11,9 +11,6 @@ function Vector (x, y)
 	this.y = y;
 }
 
-var vec4dp = function (v1, v2)
-{ return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2] + v1[3] * v2[3]; };
-
 function CatmullRom ()
 {
 	this.canvas = null;
@@ -26,7 +23,7 @@ function CatmullRom ()
 	this.animationCallback = null;
 	this.values = {p0 : 0, p1 : 0, p2 : 0, p3 : 0};
 	this.sliders = null;
-};
+}
 
 CatmullRom.prototype = {
 	
@@ -43,6 +40,7 @@ CatmullRom.prototype = {
 		this.canvas[0].height = this.height;
 		this.ctx = this.canvas[0].getContext('2d');
 		
+		// I like this little bit of hackery.
 		this.lastFrameTime = +new Date();
 		this.frameTime = 60 / 1000;
 		
@@ -63,7 +61,7 @@ CatmullRom.prototype = {
 	sliderChange: function (event, ui)
 	{
 		var self = $(this);
-		cm.values[self.attr('id')] = ui.value;
+		window.cm.values[self.attr('id')] = ui.value;
 		self.next().html(ui.value);
 	},
 	
@@ -91,8 +89,6 @@ CatmullRom.prototype = {
 		if (!this.animate) return;
 		requestAnimationFrame(this.animationCallback, this.canvas[0]);
 		if ((now - this.lastFrameTime) < this.frameTime) return;
-		
-		var ctx = this.ctx;
 		
 		// clear
 		this.canvas[0].width = this.width;
@@ -134,6 +130,7 @@ CatmullRom.prototype = {
 	
 };
 
-var cm = new CatmullRom();
-$(window).ready(function () {cm.init();});
-
+$(window).ready(function () {
+	window.cm = new CatmullRom();
+	return window.cm.init();
+});
