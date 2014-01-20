@@ -21,7 +21,7 @@ function CatmullRom ()
 	this.frameTime = 0;
 	this.lastFrameTime = 0;
 	this.animationCallback = null;
-	this.values = {p0 : 0, p1 : 0, p2 : 0, p3 : 0};
+	this.values = {p0 : 354, p1 : 243, p2 : 354, p3 : 241};
 	this.sliders = null;
 }
 
@@ -55,7 +55,18 @@ CatmullRom.prototype = {
 			max: this.max,
 			min: this.min,
 			value: (this.max - this.min) / 2,
-		}).change();
+		});
+		
+		// Set interesting initial values for the sliders
+		var vals = this.values;
+		var keys = Object.keys(vals);
+		var count = keys.length;
+		for (var i = 0; i < count; i++)
+		{
+			this.sliders.eq(i)
+				.slider({ value: vals[keys[i]] })
+			.next().html(vals[keys[i]]);
+		}
 	},
 	
 	sliderChange: function (event, ui)
